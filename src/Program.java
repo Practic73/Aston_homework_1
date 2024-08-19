@@ -1,33 +1,44 @@
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Program {
     public static void main(String[] args) {
+        MyArrayList <Integer> myList = new MyArrayList<Integer>(8);
+        myList.add(0);
+        myList.add(1);
+        myList.add(2);
+        myList.add(3);
+        myList.add(4);
+        myList.add(5);
+        myList.add(6);
+        myList.add(7);
+
+        System.out.println(myList.sizeElemenData());
+        System.out.println(myList.size());
+        myList.add(8);
+        myList.add(9);
+        myList.add(11,11);
+        myList.add(11,12);
+        /*int count = (int) myList.get(1);
+        for (int i = 0; i < 10; i++) {
+            System.out.println(myList.get(i));
+        }*/
     }
 }
 
-interface MyCollection{
-    int size();
-}
+class MyArrayList<T>{
 
-interface MyListInterface<T> extends MyCollection{
-    void add(int index, T element);
-    T remove(int index);
-    T get(int index);
-    T set(int index, T element);
-    List<T> subList(int fromIndex, int toIndex);
-}
-
-class MyArrayList<T> implements MyListInterface{
-
+    private static final int DEFAULT_CAPACITY = 10;
     private int size;
-    private T[] elementData;
+    private Object[] elementData;
+
+    public Object sizeElemenData(){
+        return this.elementData.length;
+    }
 
     public MyArrayList(){
-        this.size = 10;
+        this.elementData = new Object[DEFAULT_CAPACITY];
+        this.size = 0;
     }
 
     public MyArrayList(int initialCapacity){
@@ -35,28 +46,62 @@ class MyArrayList<T> implements MyListInterface{
             throw new IllegalArgumentException();
         }
         else {
-            this.size = initialCapacity;
+            this.elementData = new Object[initialCapacity];
+        }
+        this.size = 0;
+    }
+
+    public MyArrayList(Collection<? extends Object> collection){
+
+    }
+
+    public MyArrayList(List <? extends Object> list){
+
+    }
+
+    public void add(Object element) {
+
+        if (checkFreeCells()) {
+            elementData[size] = element;
+            size++;
+        }
+        else {
+            System.out.println("Место закончилось, произошло создание нового подмассива.");
+            createNewArray();
+            elementData[size] = element;
+            size++;
+            System.out.print(Arrays.toString(this.elementData));
         }
     }
 
-    public MyArrayList(Collection<? extends T> collection){
-
-    }
-
-    public MyArrayList(List <? extends T> list){
-
-    }
-
     public void add(int index, Object element){
-        System.out.println("True");
+        if (checkFreeCells()) {
+            if (this.elementData[index] == null) {
+                elementData[index] = element;
+                size++;
+            }
+            else {
+                for (int i = this.elementData.length - 1; i >= index; i --) {
+                    if (this.elementData[i] == null) {
+                        continue;
+                    }
+                    else {
+                        this.elementData[i + 1] = this.elementData[i];
+                    }
+                }
+                this.elementData[index] = element;
+            }
+        }
+        System.out.println(Arrays.toString(this.elementData));
+
     }
 
-    public T remove(int index){
+    public Object remove(int index){
         return null;
     }
 
-    public T get(int index){
-        T element = null;
+    public Object get(int index){
+        Object element = null;
         try {
             element = elementData[index];
         }catch (ArrayIndexOutOfBoundsException e){
@@ -65,15 +110,41 @@ class MyArrayList<T> implements MyListInterface{
         return element;
     }
 
-    public T set(int index, Object element){
+    public Object set(int index, Object element){
         return null;
     }
 
-    public List<T> subList(int fromIndex, int toIndex){
+    public List<Object> subList(int fromIndex, int toIndex){
         return null;
     }
 
     public int size(){
-        return 0;
+        return this.size;
     }
+
+    public int getNewCapacity(int oldCapacity) {
+        return (int)(oldCapacity * 1.5 + 1);
+    }
+
+    public void createNewArray(){
+        int newCapacity = getNewCapacity(this.elementData.length);
+        Object[] tempArray = new Object[newCapacity];
+
+        for (int i = 0; i < this.elementData.length; i++) {
+            tempArray[i] = this.elementData[i];
+        }
+        this.elementData = null;
+        this.elementData = new Object[newCapacity];
+        this.elementData = tempArray;
+    }
+
+    public boolean checkFreeCells() {
+        if (this.elementData.length > this.size) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 }
