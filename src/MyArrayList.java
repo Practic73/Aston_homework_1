@@ -85,6 +85,7 @@ class MyArrayList<T> implements MyListInterface<T> {
      *
      * @param element объект для вставки.
      * */
+    @Override
     public void add(int index, T element) {
         checkCorrectIndex(index);
         try {
@@ -112,6 +113,7 @@ class MyArrayList<T> implements MyListInterface<T> {
      * @param index индекс удаляемого объекта.
      * @return удаляемый объект.
      * */
+    @Override
     public T remove(int index) {
         checkCorrectIndex(index);
         Object removedElement = elementData[index];
@@ -129,6 +131,7 @@ class MyArrayList<T> implements MyListInterface<T> {
      * @param index индекс возвращаемого объекта.
      * @return найденный объект.
      * */
+    @Override
     public T get(int index) {
         Object element = null;
         try {
@@ -147,6 +150,7 @@ class MyArrayList<T> implements MyListInterface<T> {
      * @param element объект, который будет записан.
      * @return старый объект, который заменили.
      * */
+    @Override
     public T set(int index, Object element) {
         checkCorrectIndex(index);
         Object oldElement = this.elementData[index];
@@ -162,6 +166,7 @@ class MyArrayList<T> implements MyListInterface<T> {
      * @param toIndex индекс конца представления.
      * @return представление списка.
      * */
+    @Override
     public MyArrayList<T> subList(int fromIndex, int toIndex) {
         if (fromIndex > toIndex) {
             throw new IllegalArgumentException();
@@ -181,6 +186,7 @@ class MyArrayList<T> implements MyListInterface<T> {
      *
      * @return количество объектов в коллекции.
      * */
+    @Override
     public int size() {
         return this.size;
     }
@@ -198,9 +204,7 @@ class MyArrayList<T> implements MyListInterface<T> {
     /**
      * Создает новый внутренний массив с увеличенной размерностью.
      * Копирует объекты из старого массива в новый и возвращает его.
-     *
-     * @return новый массив.
-     * */
+     *  */
     public void createNewArray() {
         int newCapacity = getNewCapacity(this.elementData.length);
         Object[] tempArray = new Object[newCapacity];
